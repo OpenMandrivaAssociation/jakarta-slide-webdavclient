@@ -35,7 +35,7 @@
 
 Name:           jakarta-slide-webdavclient
 Version:        2.1
-Release:        %mkrel 4.0.0.1
+Release:        %mkrel 4.0.1
 Epoch:          0
 Summary:        Slide WebDAV client
 
@@ -52,8 +52,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} )
 %if ! %{gcj_support}
 BuildArch:      noarch
 %endif
+BuildRequires:  java-rpmbuild
 BuildRequires:  jpackage-utils >= 0:1.6
 BuildRequires:  ant >= 0:1.6
+BuildRequires:  ant-antlr
 BuildRequires:  antlr
 BuildRequires:  jakarta-commons-httpclient >= 3.0
 BuildRequires:  jakarta-commons-transaction
