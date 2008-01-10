@@ -48,7 +48,7 @@ Source2:        jakarta-slide-webdavclient-2.2-WebdavResource.java
 Source3:        slide-webdavlib-2.1.pom
 Patch0:         jakarta-slide-webdavclient-3.0-compat.patch
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} )
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 %if ! %{gcj_support}
 BuildArch:      noarch
 %endif
