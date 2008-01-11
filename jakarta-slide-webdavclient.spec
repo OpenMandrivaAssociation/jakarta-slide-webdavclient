@@ -35,7 +35,7 @@
 
 Name:           jakarta-slide-webdavclient
 Version:        2.1
-Release:        %mkrel 4.0.1
+Release:        %mkrel 4.0.2
 Epoch:          0
 Summary:        Slide WebDAV client
 
@@ -123,10 +123,10 @@ install -pm 644 \
 (cd $RPM_BUILD_ROOT%{_javadir}/%{base_name} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|-%{version}||g"`; done)
 (cd $RPM_BUILD_ROOT%{_javadir}/%{base_name} && for jar in jakarta-*.jar; do ln -sf ${jar} `echo $jar| sed  "s|jakarta-||g"`; done)
 
-%add_to_maven_depmap slide slide-webdavlib %{version} JPP/slide slide-webdavlib
+%add_to_maven_depmap slide slide-webdavlib %{version} JPP/slide jakarta-slide-webdavclient-webdavlib
 install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/maven2/poms
 install -pm 644 %{SOURCE3} \
-    $RPM_BUILD_ROOT%{_datadir}/maven2/poms/JPP.slide-slide-webdavlib.pom
+    $RPM_BUILD_ROOT%{_datadir}/maven2/poms/JPP.slide-jakarta-slide-webdavclient-webdavlib.pom
 #javadoc
 install -dm 755 $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
 cp -pr dist/doc/clientjavadoc/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
