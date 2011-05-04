@@ -35,7 +35,7 @@
 
 Name:           jakarta-slide-webdavclient
 Version:        2.1
-Release:        %mkrel 4.0.5
+Release:        %mkrel 4.0.6
 Epoch:          0
 Summary:        Slide WebDAV client
 
