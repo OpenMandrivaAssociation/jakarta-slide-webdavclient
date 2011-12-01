@@ -109,35 +109,35 @@ xml-im-exporter \
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-install -dm 755 $RPM_BUILD_ROOT%{_bindir}
-install -pm 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/webdavclient
+rm -rf %{buildroot}
+install -dm 755 %{buildroot}%{_bindir}
+install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/webdavclient
 
-install -dm 755 $RPM_BUILD_ROOT%{_javadir}/%{base_name}
+install -dm 755 %{buildroot}%{_javadir}/%{base_name}
 install -pm 644 \
  dist/lib/jakarta-slide-webdavlib-%{version}.jar \
- $RPM_BUILD_ROOT%{_javadir}/%{base_name}/%{name}-webdavlib-%{version}.jar
+ %{buildroot}%{_javadir}/%{base_name}/%{name}-webdavlib-%{version}.jar
 install -pm 644 \
  dist/lib/jakarta-slide-commandline-%{version}.jar \
- $RPM_BUILD_ROOT%{_javadir}/%{base_name}/%{name}-commandline-%{version}.jar
-(cd $RPM_BUILD_ROOT%{_javadir}/%{base_name} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|-%{version}||g"`; done)
-(cd $RPM_BUILD_ROOT%{_javadir}/%{base_name} && for jar in jakarta-*.jar; do ln -sf ${jar} `echo $jar| sed  "s|jakarta-||g"`; done)
+ %{buildroot}%{_javadir}/%{base_name}/%{name}-commandline-%{version}.jar
+(cd %{buildroot}%{_javadir}/%{base_name} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|-%{version}||g"`; done)
+(cd %{buildroot}%{_javadir}/%{base_name} && for jar in jakarta-*.jar; do ln -sf ${jar} `echo $jar| sed  "s|jakarta-||g"`; done)
 
 %add_to_maven_depmap slide slide-webdavlib %{version} JPP/slide jakarta-slide-webdavclient-webdavlib
-install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/maven2/poms
+install -d -m 755 %{buildroot}%{_datadir}/maven2/poms
 install -pm 644 %{SOURCE3} \
-    $RPM_BUILD_ROOT%{_datadir}/maven2/poms/JPP.slide-jakarta-slide-webdavclient-webdavlib.pom
+    %{buildroot}%{_datadir}/maven2/poms/JPP.slide-jakarta-slide-webdavclient-webdavlib.pom
 #javadoc
-install -dm 755 $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-cp -pr dist/doc/clientjavadoc/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} 
+install -dm 755 %{buildroot}%{_javadocdir}/%{name}-%{version}
+cp -pr dist/doc/clientjavadoc/* %{buildroot}%{_javadocdir}/%{name}-%{version}
+ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name} 
 
 %if %{gcj_support}
 %{_bindir}/aot-compile-rpm
 %endif
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 
 %post
