@@ -30,64 +30,59 @@
 %define _with_gcj_support 1
 %define gcj_support %{?_with_gcj_support:1}%{!?_with_gcj_support:%{?_without_gcj_support:0}%{!?_without_gcj_support:%{?_gcj_support:%{_gcj_support}}%{!?_gcj_support:0}}}
 
-%define section   devel
-%define base_name slide
+%define section		devel
+%define base_name	slide
 
-Name:           jakarta-slide-webdavclient
-Version:        2.1
-Release:        %mkrel 4.0.8
-Epoch:          0
-Summary:        Slide WebDAV client
-
-Group:          Development/Java
-License:        Apache Software License
-URL:            http://jakarta.apache.org/slide/
-Source0:        jakarta-slide-webdavclient-src-2.1.tar.gz
-Source1:        %{name}.sh
-Source2:        jakarta-slide-webdavclient-2.2-WebdavResource.java
-Source3:        slide-webdavlib-2.1.pom
-Patch0:         jakarta-slide-webdavclient-3.0-compat.patch
-
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
-%if ! %{gcj_support}
-BuildArch:      noarch
+Summary:	Slide WebDAV client
+Name:		jakarta-slide-webdavclient
+Version:	2.1
+Release:	4.0.8
+Group:		Development/Java
+License:	Apache Software License
+Url:		http://jakarta.apache.org/slide/
+Source0:	jakarta-slide-webdavclient-src-2.1.tar.gz
+Source1:	%{name}.sh
+Source2:	jakarta-slide-webdavclient-2.2-WebdavResource.java
+Source3:	slide-webdavlib-2.1.pom
+Patch0:		jakarta-slide-webdavclient-3.0-compat.patch
+%if !%{gcj_support}
+BuildArch:	noarch
+%else
+BuildRequires:	java-gcj-compat-devel
 %endif
-BuildRequires:  java-rpmbuild
-BuildRequires:  jpackage-utils >= 0:1.6
-BuildRequires:  ant >= 0:1.6
-BuildRequires:  ant-antlr
-BuildRequires:  antlr
-BuildRequires:  jakarta-commons-httpclient >= 3.0
-BuildRequires:  jakarta-commons-transaction
-BuildRequires:  geronimo-j2ee-connector-1.5-api
-BuildRequires:  geronimo-jta-1.0.1B-api
-BuildRequires:  servletapi5
-BuildRequires:  xml-im-exporter
-BuildRequires:  jdom
-BuildRequires:  xml-im-exporter
-Requires:  jakarta-commons-httpclient
-Requires:  jakarta-commons-transaction
-Requires:  geronimo-j2ee-connector-1.5-api
-Requires:  geronimo-jta-1.0.1B-api
-Requires:  jdom
-Requires:  xml-im-exporter
-%if %{gcj_support}
-BuildRequires:    java-gcj-compat-devel
-%endif
+BuildRequires:	ant >= 0:1.6
+BuildRequires:	ant-antlr
+BuildRequires:	antlr
+BuildRequires:	geronimo-j2ee-connector-1.5-api
+BuildRequires:	geronimo-jta-1.0.1B-api
+BuildRequires:	jakarta-commons-httpclient >= 3.0
+BuildRequires:	jakarta-commons-transaction
+BuildRequires:	java-rpmbuild
+BuildRequires:	jdom
+BuildRequires:	jpackage-utils >= 0:1.6
+BuildRequires:	servletapi5
+BuildRequires:	xml-im-exporter
+BuildRequires:	xml-im-exporter
+Requires:	geronimo-j2ee-connector-1.5-api
+Requires:	geronimo-jta-1.0.1B-api
+Requires:	jakarta-commons-httpclient
+Requires:	jakarta-commons-transaction
+Requires:	jdom
+Requires:	xml-im-exporter
 
 %description
 Slide includes a fully featured WebDAV client library and command line
 client.
 
 %package        javadoc
-Summary:        Javadoc for %{name}
-Group:          Development/Java
+Summary:	Javadoc for %{name}
+Group:		Development/Java
 
 %description    javadoc
 %{summary}.
 
 %prep
-%setup -q -n jakarta-slide-webdavclient-src-2.1
+%setup -qn jakarta-slide-webdavclient-src-2.1
 %remove_java_binaries
 cp %{SOURCE2} clientlib/src/java/org/apache/webdav/lib/WebdavResource.java
 
@@ -105,40 +100,36 @@ servlet \
 jdom \
 xml-im-exporter \
 )
-%{ant} -Dbuild.sysclasspath=first -Dant.build.javac.source=1.4
-
+%ant \
+	-Dbuild.sysclasspath=first \
+	-Dant.build.javac.source=1.4
 
 %install
-rm -rf $RPM_BUILD_ROOT
-install -dm 755 $RPM_BUILD_ROOT%{_bindir}
-install -pm 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/webdavclient
+install -dm 755 %{buildroot}%{_bindir}
+install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/webdavclient
 
-install -dm 755 $RPM_BUILD_ROOT%{_javadir}/%{base_name}
+install -dm 755 %{buildroot}%{_javadir}/%{base_name}
 install -pm 644 \
- dist/lib/jakarta-slide-webdavlib-%{version}.jar \
- $RPM_BUILD_ROOT%{_javadir}/%{base_name}/%{name}-webdavlib-%{version}.jar
+	dist/lib/jakarta-slide-webdavlib-%{version}.jar \
+	%{buildroot}%{_javadir}/%{base_name}/%{name}-webdavlib-%{version}.jar
 install -pm 644 \
- dist/lib/jakarta-slide-commandline-%{version}.jar \
- $RPM_BUILD_ROOT%{_javadir}/%{base_name}/%{name}-commandline-%{version}.jar
-(cd $RPM_BUILD_ROOT%{_javadir}/%{base_name} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|-%{version}||g"`; done)
-(cd $RPM_BUILD_ROOT%{_javadir}/%{base_name} && for jar in jakarta-*.jar; do ln -sf ${jar} `echo $jar| sed  "s|jakarta-||g"`; done)
+	dist/lib/jakarta-slide-commandline-%{version}.jar \
+	%{buildroot}%{_javadir}/%{base_name}/%{name}-commandline-%{version}.jar
+(cd %{buildroot}%{_javadir}/%{base_name} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|-%{version}||g"`; done)
+(cd %{buildroot}%{_javadir}/%{base_name} && for jar in jakarta-*.jar; do ln -sf ${jar} `echo $jar| sed  "s|jakarta-||g"`; done)
 
 %add_to_maven_depmap slide slide-webdavlib %{version} JPP/slide jakarta-slide-webdavclient-webdavlib
-install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/maven2/poms
+install -d -m 755 %{buildroot}%{_datadir}/maven2/poms
 install -pm 644 %{SOURCE3} \
-    $RPM_BUILD_ROOT%{_datadir}/maven2/poms/JPP.slide-jakarta-slide-webdavclient-webdavlib.pom
+	%{buildroot}%{_datadir}/maven2/poms/JPP.slide-jakarta-slide-webdavclient-webdavlib.pom
 #javadoc
-install -dm 755 $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-cp -pr dist/doc/clientjavadoc/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} 
+install -dm 755 %{buildroot}%{_javadocdir}/%{name}-%{version}
+cp -pr dist/doc/clientjavadoc/* %{buildroot}%{_javadocdir}/%{name}-%{version}
+ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name} 
 
 %if %{gcj_support}
 %{_bindir}/aot-compile-rpm
 %endif
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 
 %post
 %update_maven_depmap
@@ -153,7 +144,6 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %files
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_javadir}/%{base_name}/*.jar
 %{_datadir}/maven2/poms/*
@@ -165,32 +155,6 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %files javadoc
-%defattr(-,root,root,-)
 %doc %{_javadocdir}/%{name}-%{version}
 %doc %{_javadocdir}/%{name}
-
-
-%changelog
-* Fri Dec 03 2010 Oden Eriksson <oeriksson@mandriva.com> 0:2.1-4.0.5mdv2011.0
-+ Revision: 606066
-- rebuild
-
-* Wed Mar 17 2010 Oden Eriksson <oeriksson@mandriva.com> 0:2.1-4.0.4mdv2010.1
-+ Revision: 523016
-- rebuilt for 2010.1
-
-* Wed Sep 02 2009 Christophe Fergeau <cfergeau@mandriva.com> 0:2.1-4.0.3mdv2010.0
-+ Revision: 425449
-- rebuild
-
-* Fri Jan 11 2008 Alexander Kurtakov <akurtakov@mandriva.org> 0:2.1-4.0.2mdv2008.1
-+ Revision: 147940
-- fix maven depmap
-
-* Thu Jan 10 2008 Alexander Kurtakov <akurtakov@mandriva.org> 0:2.1-4.0.1mdv2008.1
-+ Revision: 147656
-- change build root
-- add ant-antlr BR
-- import jakarta-slide-webdavclient
-
 
