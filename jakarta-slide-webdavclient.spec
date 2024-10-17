@@ -39,7 +39,7 @@ Version:	2.1
 Release:	4.0.8
 Group:		Development/Java
 License:	Apache Software License
-Url:		http://jakarta.apache.org/slide/
+Url:		https://jakarta.apache.org/slide/
 Source0:	jakarta-slide-webdavclient-src-2.1.tar.gz
 Source1:	%{name}.sh
 Source2:	jakarta-slide-webdavclient-2.2-WebdavResource.java
